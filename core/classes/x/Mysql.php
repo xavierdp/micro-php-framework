@@ -80,13 +80,13 @@ class x_Mysql extends Mysqli
 
             pr(
                 "---  SQL  ---\n" .
-                    implode("\n", $a_query) .
-                    "\n\n  Called from $a_trace[file]:$a_trace[line]\n-------------",
+                implode("\n", $a_query) .
+                "\n\n  Called from $a_trace[file]:$a_trace[line]\n-------------",
                 "r:db={$this->name}"
             );
         }
 
-        if ($GLOBALS['PROFILER_SQL'] == true) {
+        if (isset($GLOBALS['PROFILER_SQL']) and $GLOBALS['PROFILER_SQL'] == true) {
             x_Profiler::start(get_called_class() . '::query()');
         }
 
@@ -115,7 +115,7 @@ class x_Mysql extends Mysqli
             //   			throw new Exception($msg);
         }
 
-        if ($GLOBALS['PROFILER_SQL'] == true) {
+        if (isset($GLOBALS['PROFILER_SQL']) and $GLOBALS['PROFILER_SQL'] == true) {
             x_Profiler::stop(get_called_class() . '::query()', $query);
         }
 
@@ -557,10 +557,7 @@ class x_Mysql extends Mysqli
 
         $a_indexes = [];
 
-        foreach (
-            $this->oQueryFetchArray("SHOW INDEX FROM $dbTablePath")
-            as $v
-        ) {
+        foreach ($this->oQueryFetchArray("SHOW INDEX FROM $dbTablePath") as $v) {
             if ($v['Key_name'] != 'PRIMARY') {
                 $a_indexes[$v['Column_name']] = $v['Column_name'];
             }
@@ -575,10 +572,7 @@ class x_Mysql extends Mysqli
 
         $a_indexes = [];
 
-        foreach (
-            $this->oQueryFetchArray("SHOW INDEX FROM $dbTablePath")
-            as $v
-        ) {
+        foreach ($this->oQueryFetchArray("SHOW INDEX FROM $dbTablePath") as $v) {
             if ($v['Key_name'] == 'PRIMARY') {
                 return $v['Column_name'];
             }

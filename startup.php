@@ -60,3 +60,4 @@ function &db0()
 }
 
 define("DOMAIN","");
+

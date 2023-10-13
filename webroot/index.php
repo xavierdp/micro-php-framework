@@ -20,6 +20,14 @@ include DIR_ROOT . "/app/startup.php";
 /* date debug output */
 d();
 
+
+if ($a = route("^/test")) {
+    echo "test";
+    exit;
+}
+
+
+
 /**
  * API AJAX
  * 
