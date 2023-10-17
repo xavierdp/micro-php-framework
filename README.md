@@ -54,9 +54,59 @@ The **micro-php-framework** framework is designed to run on the **[turbonibash w
 
 Normally the installation should be finished launching on your browser the link of your application on the route `/test` for example `https://app_host/test` here replace `app_host` with the host of your application the browser should show the `test` message.
 
-## Démarage rapide
+## Quick Start
 
 ## Database
+
+The connection to the database is done in the file [startup.php](startup.php).
+The x_Mysql class inherits from the native Mysqli class.
+The basic way to create a multiton at startup is like this :
+
+```php
+    function &db0()
+    {
+        return x_Mysql::multiton(
+            array(
+                "user"   => "user",
+                "name"   => "db_name",
+                "passwd" => "password",
+            )
+        );
+    }
+```
+
+One instance is created and stored to be ru-usable.
+
+### There is many ways to do SQL queries :
+
+- Queries without results :
+  ```php
+  db()->oQuery("SET ...");
+  ```
+- Queries with results :
+  - One array of arrays data :
+    ```php
+        db()->oQueryFetchArray("
+            SELECT *
+            FROM `table`
+        "));
+    ```
+  - One array of data :
+    ```php
+        db()->oQueryFetchArraySingle("
+            SELECT *
+            FROM `table`
+            LIMIT 1
+        "));
+    ```
+  - One data :
+    ```php
+        db()->oQueryFetchArraySinglePop("
+            SELECT field
+            FROM `table`
+            LIMIT 1
+        "));
+    ```
 
 ## HTTP
 
@@ -164,7 +214,7 @@ Normally the installation should be finished launching on your browser the link 
     =========================== this is a string ===========================
   ```
 
-- ### h()
+- ### d()
 
   Like a date time
   <br>
