@@ -130,8 +130,9 @@ One instance is created and stored to be ru-usable.
       db()->oInsertIgnore("table",array);
   ```
 
-    #### Examples :
-      ```php
+  #### Examples :
+
+    ```php
         function &db()
         {
             return	x_Mysql::multiton
@@ -186,7 +187,7 @@ One instance is created and stored to be ru-usable.
             WHERE `key` = 'SHOP_NAME'
             LIMIT 1
         "));
-      ```
+    ```
 
 ## HTTP
 
