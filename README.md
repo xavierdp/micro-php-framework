@@ -130,64 +130,64 @@ One instance is created and stored to be ru-usable.
       db()->oInsertIgnore("table",array);
   ```
 
-  #### Examples :
+#### Examples :
 
-    ```php
-        function &db()
-        {
-            return	x_Mysql::multiton
+```php
+    function &db()
+    {
+        return	x_Mysql::multiton
+        (
+            array
             (
-                array
-                (
-                    "user" 	=> "user",
-                    "name"	=> "db_name",
-                    "passwd" 	=> "passord"
-                )
-            );
-        }
+                "user" 	=> "user",
+                "name"	=> "db_name",
+                "passwd" 	=> "passord"
+            )
+        );
+    }
 
-        db()->oQuery("
-            DROP TABLE IF EXISTS `datas`
-        ");
+    db()->oQuery("
+        DROP TABLE IF EXISTS `datas`
+    ");
 
-        db()->oQuery("
-            CREATE TABLE `datas` (
-            `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-            `key` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-            `value` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-            `description` mediumtext COLLATE utf8_unicode_ci,
-            `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-            `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-            PRIMARY KEY (`id`),
-            UNIQUE KEY `key` (`key`)
-            ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
-        ");
+    db()->oQuery("
+        CREATE TABLE `datas` (
+        `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+        `key` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+        `value` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+        `description` mediumtext COLLATE utf8_unicode_ci,
+        `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+        `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        PRIMARY KEY (`id`),
+        UNIQUE KEY `key` (`key`)
+        ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+    ");
 
-        db()->oInsert("datas",["key" => "SHOP_NAME","value" => "My Shop"]);
-        db()->oInsert("datas",["key" => "SHOP_ADDRESS","value" => "It's here"]);
+    db()->oInsert("datas",["key" => "SHOP_NAME","value" => "My Shop"]);
+    db()->oInsert("datas",["key" => "SHOP_ADDRESS","value" => "It's here"]);
 
-        db()->oInsertUpdate("datas",["key" => "SHOP_NAME","value" => "My super Shop"]);
+    db()->oInsertUpdate("datas",["key" => "SHOP_NAME","value" => "My super Shop"]);
 
-        db()->oInsertIgnore("datas",["key" => "SHOP_NAME","value" => "My other Shop"]);
+    db()->oInsertIgnore("datas",["key" => "SHOP_NAME","value" => "My other Shop"]);
 
-        print_r(db()->oQueryFetchArray("
-            SELECT \*
-            FROM `datas`
-        "));
+    print_r(db()->oQueryFetchArray("
+        SELECT \*
+        FROM `datas`
+    "));
 
-        print_r(db()->oQueryFetchArraySingle("
-            SELECT *
-            FROM `datas`
-            LIMIT 1
-        "));
+    print_r(db()->oQueryFetchArraySingle("
+        SELECT *
+        FROM `datas`
+        LIMIT 1
+    "));
 
-        print_r(db()->oQueryFetchArraySinglePop("
-            SELECT `value`
-            FROM `datas`
-            WHERE `key` = 'SHOP_NAME'
-            LIMIT 1
-        "));
-    ```
+    print_r(db()->oQueryFetchArraySinglePop("
+        SELECT `value`
+        FROM `datas`
+        WHERE `key` = 'SHOP_NAME'
+        LIMIT 1
+    "));
+```
 
 ## HTTP
 
