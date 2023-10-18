@@ -4,7 +4,7 @@ micro-php-framework is a simplistic php framework that integrates various tools 
 
 ## Features
 
-- [Databases](#database).
+- [Databases](doc/database.md).
 - [HTTP](#http).
 - [AUTH](#auth).
 - [API](#api).
