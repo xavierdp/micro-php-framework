@@ -1,6 +1,6 @@
 # Database
 
-The connection to the database is done in the file [startup.php](startup.php).
+The connection to the database is done in the file [startup.php](../startup.php).
 The x_Mysql class inherits from the native Mysqli class.
 The basic way to create a multiton at startup is like this :
 

@@ -5,12 +5,12 @@ micro-php-framework is a simplistic php framework that integrates various tools 
 ## Features
 
 - [Databases](doc/database.md).
-- [HTTP](#http).
-- [AUTH](#auth).
-- [API](#api).
-- [Route](#route).
-- [Profiler](#profiler).
-- [Debug](#debug).
+- [HTTP](doc/http.md).
+- [AUTH](doc/auth.md).
+- [API](doc/api.md).
+- [Route](doc/route.md).
+- [Profiler](doc/profiler.md).
+- [Debug](doc/debug.md).
 
 And more...
 
@@ -56,257 +56,84 @@ Normally the installation should be finished launching on your browser the link 
 
 ## Quick Start
 
-## Database
+The bootstrap load the strict minimum to be ready
 
-The connection to the database is done in the file [startup.php](startup.php).
-The x_Mysql class inherits from the native Mysqli class.
-The basic way to create a multiton at startup is like this :
+The XFW PHP is principally composed of debug, autoload, an HTTP router, Auth and a JSON API server.
 
-```php
-    function &db0()
-    {
-        return x_Mysql::multiton(
-            array(
-                "user"   => "user",
-                "name"   => "db_name",
-                "passwd" => "password",
-            )
-        );
-    }
-```
-
-One instance is created and stored to be ru-usable.
-
-### There is many ways to do SQL queries :
-
-- Queries without results :
-  ```php
-  db()->oQuery("SET ...");
-  ```
-- Queries with results :
-
-  - One array of arrays data :
-    ```php
-        db()->oQueryFetchArray("
-            SELECT *
-            FROM `table`
-        "));
-    ```
-  - One array of data :
-    ```php
-        db()->oQueryFetchArraySingle("
-            SELECT *
-            FROM `table`
-            LIMIT 1
-        "));
-    ```
-  - One data :
-
-    ```php
-        db()->oQueryFetchArraySinglePop("
-            SELECT field
-            FROM `table`
-            LIMIT 1
-        "));
-    ```
-
-### There is many ways to do inserts :
-
-- Normal insert :
-  ```php
-      db()->oInsert("table",array);
-  ```
-- Insert Update :
-  <br>
-  The update is based on keys.
-  ```php
-      db()->oInsertUpdate("table",array);
-  ```
-- Insert ignore :
-  <br>
-  The Ignore is based on keys.
-
-  ```php
-      db()->oInsertIgnore("table",array);
-  ```
-
-#### Examples :
+All your PHP files need to load the bootstrap : you have to find the good relative path from it.
 
 ```php
-    function &db()
-    {
-        return	x_Mysql::multiton
-        (
-            array
-            (
-                "user" 	=> "user",
-                "name"	=> "db_name",
-                "passwd" 	=> "passord"
-            )
-        );
-    }
+   <?php
+   // debug flag
+   $GLOBALS["DEBUG"] = true;
+   // $GLOBALS["DEBUG_MODE"] = "file";
+   // $GLOBALS["DEBUG_MODE"] = "global";
+   $GLOBALS["DEBUG_MODE"] = "stdout";
 
-    db()->oQuery("
-        DROP TABLE IF EXISTS `datas`
-    ");
 
-    db()->oQuery("
-        CREATE TABLE `datas` (
-        `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-        `key` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-        `value` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-        `description` mediumtext COLLATE utf8_unicode_ci,
-        `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-        `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        PRIMARY KEY (`id`),
-        UNIQUE KEY `key` (`key`)
-        ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
-    ");
+   // path of the bootstrap
+   define("DIR_ROOT",realpath(dirname(__FILE__)."/../.."));
 
-    db()->oInsert("datas",["key" => "SHOP_NAME","value" => "My Shop"]);
-    db()->oInsert("datas",["key" => "SHOP_ADDRESS","value" => "It's here"]);
-
-    db()->oInsertUpdate("datas",["key" => "SHOP_NAME","value" => "My super Shop"]);
-
-    db()->oInsertIgnore("datas",["key" => "SHOP_NAME","value" => "My other Shop"]);
-
-    print_r(db()->oQueryFetchArray("
-        SELECT \*
-        FROM `datas`
-    "));
-
-    print_r(db()->oQueryFetchArraySingle("
-        SELECT *
-        FROM `datas`
-        LIMIT 1
-    "));
-
-    print_r(db()->oQueryFetchArraySinglePop("
-        SELECT `value`
-        FROM `datas`
-        WHERE `key` = 'SHOP_NAME'
-        LIMIT 1
-    "));
+   // include the bootstrap
+   include(DIR ROOT."/app/startup.php");
 ```
 
-## HTTP
+Include the [startup.php](startup.php) file : You have to configure the base you need your scripts
 
-## AUTH
+- paths
+- database connexion
+- ...
 
-## API
+### Paths
 
-**micro-php-framework** has a built-in **API** engine that can be configured in the [webroot/index.php](webroot/index.php) file..
+Here the base paths i use :
 
-## Route
+```
+├── app
+├── etc
+├── log
+├── sav
+└── tmp
+```
 
-**micro-php-framework** natively has a routing system which is located in the file [webroot/index.php](webroot/index.php).
+Here the base skeleton of an application :
 
-## Profiler
+```
+├── app
+│   ├── classes
+│   │   └── c
+│   │       └── Test.php
+│   ├── scripts
+│   │   ├── 001.php
+│   │   └── 002.php
+│   ├── startup.php
+│   └── webroot
+│       └── index.php
+├── core
+│   ├── base
+│   │   ├── bootstrap.php
+│   │   ├── defines.php
+│   │   └── functions.php
+│   ├── classes
+│   │   └── x
+│   │       ├── Auth.php
+│   │       ├── Core.php
+│   │       ├── Model.php
+│   │       ├── Mysql.php
+│   └── lib
+│       └── html5.php
+├── cron
+│   └── process.php
+```
 
-## Debug
+The [startup.php](startup.php) file define the differents paths of your application : it depends of your need
 
-**micro-php-framework** has several debug methods in cli or web.
-
-- ### e()
-
-  It’s the echo function
-  <br>
-  PHP code :
-
-  ```php
-  e("this is a string");
-  ```
-
-  Out log :
-
-  ```console
-        this is a string
-  ```
-
-- ### pr()
-
-  It’s the print_r function
-  <br>
-  PHP code :
-
-  ```php
-      $a_data = array
-      (
-          "0"   => "zero",
-          "1"	=> "one",
-          "2"	=> "two",
-      );
-      pr($a_data);
-  ```
-
-  Out log :
-
-  ```php
-        Array
-        (
-            [0] => zero
-            [1] => one
-            [2] => two
-        )
-  ```
-
-- ### vd()
-
-  It’s the var_dump function
-  <br>
-  PHP code :
-
-  ```php
-      $a_data = array
-      (
-          "0"   => "zero",
-          "1"	=> "one",
-          "2"	=> "two",
-      );
-      vd($a_data);
-  ```
-
-  Out log :
-
-  ```php
-        array(3) {
-        [0]=>
-        string(4) "zero"
-        [1]=>
-        string(3) "one"
-        [2]=>
-        string(3) "two"
-        }
-  ```
-
-- ### h()
-
-  Like an header
-  <br>
-  PHP code :
-
-  ```php
-      h("this is a string");
-  ```
-
-  Out log :
-
-  ```console
-    =========================== this is a string ===========================
-  ```
-
-- ### d()
-
-  Like a date time
-  <br>
-  PHP code :
-
-  ```php
-      d();
-  ```
-
-  Out log :
-
-  ```console
-    ========================= 2018-11-07 18:40:34 ==========================
-  ```
+```php
+<?php
+   define("DIR_SAV",		DIR_ROOT."/sav");
+   define("DIR_TMP",		DIR_ROOT."/tmp");
+   define("DIR_LOG",		DIR_ROOT."/log");
+   define("DIR_APP",		DIR_ROOT."/app");
+   define("DIR_ETC",		DIR_ROOT."/etc");
+   define("DIR_WEBROOT",	DIR_APP."/webroot");
+```
