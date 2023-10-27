@@ -16,4 +16,13 @@ class c_Zest
       "foo" => "bar",
     ];
   }
+
+  static public function rawHTML($a_in)
+  {
+    h(__FUNCTION__);
+    pr($a_in);
+
+    return "<b>Hello</b>";
+  }
+  
 }

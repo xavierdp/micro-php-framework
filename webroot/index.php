@@ -10,6 +10,7 @@ $GLOBALS["ERROR_LOG"] = true;
 // $GLOBALS["DEBUG_CLASS_WALK"]  = true;
 // $GLOBALS["DEBUG_CLASS_FOUND"] = true;
 
+// define("PRODUCTION", true);
 
 /* get dynamicaly where the project root directory is located */
 define("DIR_ROOT", realpath(dirname(__FILE__) . "/../.."));
@@ -66,30 +67,47 @@ if ($a = route("^/JSON/(JSON|RAW)/([^/]*)/([^/]*)")) {
             $data = call_user_func_array("$class::$method", [$a_params]);
         }
 
-    } catch (Exception $e) {
-        $data = [
-            "message" => "erreur",
-            "data" => $e->getMessage() . "\n\n" . getExceptionTraceAsString($e),
-        ];
+        if ($a[1] == "JSON") {
+            echo json_encode($data);
+        } elseif ($a[1] == "RAW") {
+            echo ($data);
+        }
 
+        exit;
+    } catch (Exception $e) {
         h("ERROR");
 
-        if ($GLOBALS["DEBUG_MODE"] != "sdout" or PRODUCTION == false) {
+        h("API ERROR");
+        if (!PRODUCTION) {
             pr(getExceptionTraceAsString($e));
             h("$class::$method");
             pr($a_params);
+
+            if ($a[1] == "JSON") {
+                $data = [
+                    "message" => "error",
+                    "data" => $e->getMessage() . "\n\n" . getExceptionTraceAsString($e),
+                ];
+                echo json_encode($data);
+            } elseif ($a[1] == "RAW") {
+                echo ("<pre>\n" . $e->getMessage() . "\n\n" . getExceptionTraceAsString($e) . "</pre>\n");
+            }
+
         } else {
-            h("API ERROR");
+            if ($a[1] == "JSON") {
+                $data = [
+                    "message" => "error",
+                    "data" => "error",
+                ];
+
+                echo json_encode($data);
+            } elseif ($a[1] == "RAW") {
+                echo ("error");
+            }
+            exit;
         }
     }
 
-    if ($a[1] == "JSON") {
-        echo json_encode($data);
-    } elseif ($a[1] == "RAW") {
-        echo ($data);
-    }
-
-    exit;
 }
 
 
