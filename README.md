@@ -16,7 +16,7 @@ And more...
 
 ## Installation
 
-The **micro-php-framework** framework is designed to run on the **[turbonibash web](https://github.com/xavierdp/turbinobash-web)** environment. but it can still start in another environment, in this section we will show how to install it in a turnonibash web environment.
+The **micro-php-framework** framework is designed to run on the **[turbinobash web](https://github.com/xavierdp/turbinobash-web)** environment. but it can still start in another environment, in this section we will show how to install it in a turnonibash web environment.
 
 1. Start by creating an application with **[turbonibash web](https://github.com/xavierdp/turbinobash-web)**.
 
@@ -38,7 +38,7 @@ The **micro-php-framework** framework is designed to run on the **[turbonibash w
        tb app sudo/bulldozer my_app
    ```
 
-1. If **composer** is not yet installed on **[turbonibash web](https://github.com/xavierdp/turbinobash-web)** it must be installed.
+1. If **composer** is not yet installed on **[turbinobash web](https://github.com/xavierdp/turbinobash-web)** it must be installed.
 
    ```console
        tb app sudo/install/composer
